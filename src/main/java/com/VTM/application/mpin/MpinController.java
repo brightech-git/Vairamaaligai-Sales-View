@@ -15,6 +15,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.NotEmpty;
 
 @RestController
+@CrossOrigin(origins = {
+        "https://nkvairamaaligai.com/",
+        "http://localhost:3000"
+})
 @RequestMapping("/api/v1")
 @Validated
 public class MpinController {
