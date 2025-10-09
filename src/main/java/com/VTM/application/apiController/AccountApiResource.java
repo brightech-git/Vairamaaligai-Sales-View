@@ -13,7 +13,7 @@ import java.util.Map;
 @RestController
 @CrossOrigin(origins = {
         "https://nkvairamaaligai.com/",
-        "http://localhost:3000"
+        "http://localhost:3000",
 })
 @RequestMapping("/api/v1")
 public class AccountApiResource {
