@@ -1,6 +1,7 @@
 package com.VTM.application.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +20,7 @@ public class AccountWritePlatformServiceImpl implements AccountWritePlatformServ
 
 
     @Autowired
-    public AccountWritePlatformServiceImpl(JdbcTemplate firstJdbcTemplate, JdbcTemplate secondJdbcTemplate, JdbcTemplate thirdJdbcTemplate) {
+    public AccountWritePlatformServiceImpl(@Qualifier("firstJdbcTemplate") JdbcTemplate firstJdbcTemplate, @Qualifier("secondJdbcTemplate")JdbcTemplate secondJdbcTemplate, @Qualifier("thirdJdbcTemplate")JdbcTemplate thirdJdbcTemplate) {
         this.firstJdbcTemplate = firstJdbcTemplate;
         this.secondJdbcTemplate = secondJdbcTemplate;
 
@@ -294,32 +295,40 @@ public List<Map<String, Object>> totalCash(Date startDate, Date endDate) {
 
     @Override
     public Map<String, Object> getRateOFGoldAndSliver() {
-        String sql = """
-        SELECT METALID, PURITY, PRATE
-        FROM RATEMAST
-        WHERE RATEGROUP = (SELECT MAX(RATEGROUP) FROM RATEMAST)
-          AND (
-                (METALID = 'G' AND PURITY = '91.60') OR 
-                (METALID = 'P' AND PURITY = '95.00') OR 
-                (METALID = 'S' AND PURITY = '91.60')
-          )
-    """;
 
-        List<Map<String, Object>> results = firstJdbcTemplate.query(sql, (rs, rowNum) -> {
-            Map<String, Object> row = new HashMap<>();
-            row.put("METALID", rs.getString("METALID"));
-            row.put("PRATE", rs.getFloat("PRATE"));
-            return row;
-        });
+            String sql = "  SELECT METALID, PURITY, PRATE \n" +
+                    "                FROM RATEMAST \n" +
+                    "                WHERE RATEGROUP = (SELECT MAX(RATEGROUP)\n" +
+                    "                                   FROM RATEMAST) \n" +
+                    "                AND ((METALID = 'G' AND PURITY = '91.60') OR \n" +
+                    "                   (METALID = 'P' AND PURITY = '95.00') OR \n" +
+                    "                    (METALID = 'S' AND PURITY = '91.60'))";
 
-        // Convert list to map by METALID for easier access like { "G": 6250.0, "S": 75.3, "P": 5000.0 }
-        Map<String, Object> rateMap = new HashMap<>();
-        for (Map<String, Object> entry : results) {
-            rateMap.put((String) entry.get("METALID"), entry.get("PRATE"));
+            List<Map<String, Object>> results = firstJdbcTemplate.query(sql, (rs, rowNum) -> {
+                Map<String, Object> row = new HashMap<>();
+                row.put("METALID", rs.getString("METALID"));
+                row.put("PRATE", rs.getFloat("PRATE"));
+                return row;
+            });
+
+            Map<String, Object> finalResult = new HashMap<>();
+
+            for (Map<String, Object> row : results) {
+                String metalId = (String) row.get("METALID");
+                float rate = (float) row.get("PRATE");
+
+                if ("G".equals(metalId)) {
+                    finalResult.put("GOLDRATE", rate);
+                } else if ("S".equals(metalId)) {
+                    finalResult.put("SILVERRATE", rate);
+                }else if ("P".equals(metalId)) {
+                    finalResult.put("PATTINUMRATE", rate);
+                }
+            }
+
+            return finalResult;
         }
 
-        return rateMap;
-    }
 
     public Map<String, Object> getSchemeCollection(Date startDate, Date endDate) {
         String sql = """
