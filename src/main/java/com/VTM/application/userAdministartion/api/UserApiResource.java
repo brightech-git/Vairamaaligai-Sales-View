@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin(origins = {
-        "https://nkvairamaaligai.com/",
+        "https://nkvairamaaligai.com",
+        "https://sales.nkvairamaaligai.com",
         "http://localhost:3000"
 })
 @RequestMapping("/api/v1")
