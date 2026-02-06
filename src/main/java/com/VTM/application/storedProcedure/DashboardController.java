@@ -5,7 +5,11 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1")
-@CrossOrigin(origins = {"http://localhost:3000"})
+@CrossOrigin(origins = {
+        "https://sales.nkvairamaaligai.com",
+        "http://localhost:3000"
+})
+
 public class DashboardController {
 
     private final DashboardRepository dashboardRepository;
