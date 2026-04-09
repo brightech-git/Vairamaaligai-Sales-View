@@ -24,7 +24,7 @@ public class DashboardController {
             @RequestParam(required = false) String toDate,
             @RequestParam(required = false, defaultValue = "") String costId,
             @RequestParam(required = false, defaultValue = "VAIADMINDB") String adminDB,
-            @RequestParam(required = false, defaultValue = "VAIT2526") String transDB,
+            @RequestParam(required = false, defaultValue = "VAIT2627") String transDB,
             @RequestParam(required = false, defaultValue = "VAISH0708") String schemeDB
     ) {
         return dashboardRepository.getDashboardData(

@@ -154,7 +154,7 @@ public List<Map<String, Object>> totalCash(Date startDate, Date endDate) {
                 "                i.TRANDATE,\n" +
                 "                (i.AMOUNT + i.TAX) AS AMOUNT, \n" +
                 "                u.USERNAME \n" +
-                "                FROM VAIT2526..ISSUE i \n" +
+                "                FROM VAIT2627..ISSUE i \n" +
                 "                LEFT JOIN VAIADMINDB..USERMASTER u ON u.USERID = i.USERID \n" +
                 "                WHERE i.CANCEL = 'y' AND CAST(i.TRANDATE AS DATE) BETWEEN ? AND ?\n" +
                 "                ORDER BY i.TRANDATE";

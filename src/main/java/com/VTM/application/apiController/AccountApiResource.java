@@ -14,7 +14,8 @@ import java.util.Map;
 @CrossOrigin(origins = {
         "https://nkvairamaaligai.com",
         "https://sales.nkvairamaaligai.com",
-        "http://localhost:3000"
+        "http://localhost:3000",
+        "https://www.nkvairamaaligai.com"
 })
 @RequestMapping("/api/v1")
 public class AccountApiResource {
